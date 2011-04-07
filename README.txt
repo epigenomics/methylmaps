@@ -17,11 +17,11 @@ method.
 ===============
 
 Download Methyl-Analyzer from:
-     http://github.com/epigenomics/MethylAnalyzer
+     http://github.com/epigenomics/methylmaps
 or clone the repository via git:
-     git clone git://github.com/epigenomics/MethylAnalyzer.git
+     git clone git://github.com/epigenomics/methylmaps.git
 
-At the MethylAnalyzer directory, run the following command:
+At the methylmaps directory, run the following command:
      $ python setup.py build
      $ sudo python setup.py install
 
