@@ -1,0 +1,28 @@
+# Parameters for RE/McrBC filtering
+# For McrBC recognition site: the pattern is 5'-RCGN(40-500)-RCG-3'
+# Search length outside of the RE fragment end
+outlen	5
+# Search length inside of the RE fragment end
+inlen	5
+# Search length on both sides of the McrBC fragment
+winlen	500
+# Fuzzy length on both sides of the McrBC fragment
+mfuzzylen	50
+# The distance from the McrBC half site to the fragment end
+cut_dist	50
+# Minimum distance between the two McrBC half sites
+min_dist	40
+# Maximum distance between the two McrBC half sites
+max_dist	500
+# Save a log file for filtered fragments that do not have enzyme sites
+# at the end, fixed value = 3, or 0
+failed_2ends	3
+# Save a log file for filtered fragments that do not have enzyme sites
+# in the middle, fixed value = 4, or 0
+failed_mid	4
+# Save a log file for passed fragments that have both ends with enzyme
+# site, fixed value = 1, or 0
+passed_2ends	1
+# Save a log file for passed fragments that only have one end with
+# enzyme site, fixed value = 2, or 0
+passed_1end	2

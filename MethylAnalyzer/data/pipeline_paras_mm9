@@ -1,0 +1,4 @@
+CMAP	/path/to/mm9/mm9.cmap
+ANNO_DIR	/path/to/mm9/sites
+METH_AVE	0.71
+CHR_LENGTH	/path/to/mm9/chr_length

@@ -1,0 +1,4 @@
+CMAP	/path/to/hg18/hg18.cmap
+ANNO_DIR	/path/to/hg18/sites
+METH_AVE	0.71
+CHR_LENGTH	/path/to/hg18/chr_length
