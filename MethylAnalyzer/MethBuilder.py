@@ -8,9 +8,10 @@ import re
 import sys
 from math import floor
 from numpy import mean
-from Bio import SeqIO
-from MethError import MethError
-from UtilityFuncs import finditer, EPSILON
+from pyfasta import Fasta
+
+from MethylAnalyzer.MethError import MethError
+from MethylAnalyzer.UtilityFuncs import finditer, EPSILON
 
 # Global variables
 MCRBC_SEQS = ['ACG', 'GCG', 'CGC', 'CGT']
@@ -251,7 +252,7 @@ class CpGFull(Position):
         try:
             self.p = n1/(n1 + p1_p2*n2)
         except ZeroDivisionError:
-            raise MethError('Unable to estimate DNA methylation probability for CpG at position [ %d ]' % self.coordinate)
+            raise MethError('ZeroDivisionError, Unable to estimate DNA methylation probability for CpG at position [ %d ]' % self.coordinate) 
 
     def get_record(self, chr):
         """
@@ -501,11 +502,12 @@ class SiteParser:
         return self.sites
 
     def parse_seq(self, seqfile):
-        "Scan the given sequence (usually one chromosome) to generate CpG/RE/McrBC sites"
-        seqfh = open(seqfile)
-        fa_record = SeqIO.parse(seqfh, 'fasta').next()
-        seq = fa_record.seq.upper()
-        seqfh.close()
+        """
+        Scan the given sequence (usually one chromosome) to generate CpG/RE/McrBC sites
+        Note: fasta file has head(s) same as chromosome name(s)
+        """
+        fa_record = Fasta(seqfile)
+        seq = str(fa_record[self.chr]).upper()
         # 1. Parse CpG sites, use the coordinate of C
         for coord in finditer(seq, 'CG'):
             cpg = CpGFull(coord)
@@ -605,11 +607,9 @@ class SiteParser:
         o fafile - file, Fasta file
         """
         # Parse Fasta file
-        fafh = open(fafile)
-        fa_record = SeqIO.parse(fafh, 'fasta').next()  # only one record in the fasta file
-        seq = fa_record.seq.upper()
+        fa_record = Fasta(fafile)
+        seq = str(fa_record[self.chr]).upper()
         seqlen = len(seq)
-        fafh.close()
         # Compute O/E ratio
         for cpg in self.cpg_sites.sorted_iter():
             position = cpg.coordinate
@@ -1138,7 +1138,7 @@ class MethStateParser:
            n2,i = mean(n2's in segment i)   n2 = mcrbcInterior  
         a1 = sum(n1,i)/p_bar
         a2 = sum(n2,i)/(1-p_bar)
-        p1/p2 ~ a1/a2
+        p1/p2 (lamda) ~ a1/a2
 
         Note: p_bar is determined by LUMA assay.
         """
@@ -1146,9 +1146,13 @@ class MethStateParser:
         a2 = sum_n2/(1-p_bar)
         try:
             p1_p2 = a1/a2
-            return p1_p2
         except ZeroDivisionError:
-            raise MethError('Unable to estimate sampling probability')
+            raise MethError('ZeroDivisionError, Unable to estimate sampling probability')
+        # Check lamda value for the extremely biased sampling between RE and McrBC
+        if p1_p2 > 10.0 or p1_p2 < 0.1:
+            raise MethError('Extremely biased sampling between RE and McrBC, lamda = %.2f' % p1_p2)
+        return p1_p2
+        
 
     # Public methods
     def set_cpgsites(self, cpg_sites):

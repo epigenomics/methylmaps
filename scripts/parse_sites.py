@@ -11,10 +11,9 @@ import os
 import argparse
 import datetime
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../methylanalyzer'))
-from MethError import MethError
-from MethBuilder import SiteParser
-from UtilityFuncs import check_chr, check_file
+from MethylAnalyzer.MethError import MethError
+from MethylAnalyzer.MethBuilder import SiteParser
+from MethylAnalyzer.UtilityFuncs import check_chr, check_file
 
 def main(chr, seqfile, outname):
     # Initiate the SiteParser
@@ -49,7 +48,7 @@ def write2output(filename, sites, chr):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Parse genomic sequences for CpG, RE, and McrBC sites')
     parser.add_argument('chr', help='chromosome')
-    parser.add_argument('fasta', help='Fasta sequence')
+    parser.add_argument('fasta', help='Fasta sequence for the chromosome')
     parser.add_argument('--outname', help='name for the output files, default=chrN')
     # Parse arguments
     args = parser.parse_args()

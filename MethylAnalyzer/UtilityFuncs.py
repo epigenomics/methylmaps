@@ -8,7 +8,8 @@ import os
 import re
 import fnmatch
 from types import IntType, LongType, FloatType, NoneType, StringType
-from MethError import MethError
+
+from MethylAnalyzer.MethError import MethError
 
 # Define epsilon
 EPSILON = 0.0000001
@@ -203,7 +204,7 @@ def cpgdensity_byseq(start, end, seq):
     Input:
     o start - int, 0-based
     o end - int, 1-based
-    o seq - Bio.Seq object
+    o seq - sequence string
     Output:
     o CpG density - float
     """

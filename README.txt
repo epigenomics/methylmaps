@@ -9,8 +9,11 @@ method.
 * Python
      - python 2.7
      - numpy
-     - biopython
+     - pyfasta
      - pysam
+
+One easy way to install the above packages is to use 'pip'. For example, 
+    $ sudo pip install numpy
 
 
 2. Installation

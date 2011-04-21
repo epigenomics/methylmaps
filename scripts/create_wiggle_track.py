@@ -11,10 +11,9 @@ import os
 import argparse
 import datetime
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../methylanalyzer'))
-from MethError import MethError
-from MethBuilder import SiteParser, HUMAN_MAIN_CHRS, MOUSE_MAIN_CHRS
-from UtilityFuncs import check_file
+from MethylAnalyzer.MethError import MethError
+from MethylAnalyzer.MethBuilder import SiteParser, HUMAN_MAIN_CHRS, MOUSE_MAIN_CHRS
+from MethylAnalyzer.UtilityFuncs import check_file
 
 def main(chrs, meth_dir, out_dir, sname):
     LOGFH = open('create_wiggle_tracks.LOG', 'w')

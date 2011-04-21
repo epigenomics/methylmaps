@@ -12,10 +12,9 @@ import argparse
 import os
 import datetime
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../methylanalyzer'))
-from MethError import MethError
-from MethBuilder import HUMAN_CHRS, MOUSE_CHRS
-from UtilityFuncs import check_file
+from MethylAnalyzer.MethError import MethError
+from MethylAnalyzer.MethBuilder import HUMAN_CHRS, MOUSE_CHRS
+from MethylAnalyzer.UtilityFuncs import check_file
 
 def main(chrs, cpg_dir, out_dir):
     LOGFH = open('create_cpg_tracks.LOG', 'w')

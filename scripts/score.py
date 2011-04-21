@@ -11,10 +11,9 @@ import argparse
 import os
 import datetime
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../methylanalyzer'))
-from MethError import MethError
-from MethBuilder import MethStateParser
-from UtilityFuncs import check_chr, check_file
+from MethylAnalyzer.MethError import MethError
+from MethylAnalyzer.MethBuilder import MethStateParser
+from MethylAnalyzer.UtilityFuncs import check_chr, check_file
 
 def main(p_bar, chr, chr_len, meth_data, out_dir):
     LOGFH = open(os.path.join(out_dir, 'score.LOG'), 'a')    

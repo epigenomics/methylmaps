@@ -13,10 +13,9 @@ import os
 import re
 import datetime
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../methylanalyzer'))
-from MethError import MethError
-from MethBuilder import SiteParser, FragmentParser, REFilter, MCRBCFilter
-from UtilityFuncs import check_chr, check_file, count_file_lines
+from MethylAnalyzer.MethError import MethError
+from MethylAnalyzer.MethBuilder import SiteParser, FragmentParser, REFilter, MCRBCFilter
+from MethylAnalyzer.UtilityFuncs import check_chr, check_file, count_file_lines
 
 DIR = os.path.dirname(__import__('MethBuilder').__file__)
 

@@ -12,9 +12,8 @@ import re
 import argparse
 import datetime
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../methylanalyzer'))
-from UtilityFuncs import check_file
-from MethError import MethError
+from MethylAnalyzer.UtilityFuncs import check_file
+from MethylAnalyzer.MethError import MethError
 
 # Pipeline scripts
 PIPELINE = {1: 'parse_mates.py', 2: 'filter.py', 3: 'score.py'}

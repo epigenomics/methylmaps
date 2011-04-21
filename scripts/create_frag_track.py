@@ -11,9 +11,8 @@ import sys
 import argparse
 import bisect
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../methylanalyzer'))
-from MethError import MethError
-from UtilityFuncs import check_file
+from MethylAnalyzer.MethError import MethError
+from MethylAnalyzer.UtilityFuncs import check_file
 
 def main(header, listfile, fragfile, outfile):
     # Get the id list, doesn't need to be unique

@@ -11,10 +11,9 @@ import argparse
 import datetime
 from string import lower
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../methylanalyzer'))
-from MethError import MethError
-from MethBuilder import FragmentParser
-from UtilityFuncs import check_file
+from MethylAnalyzer.MethError import MethError
+from MethylAnalyzer.MethBuilder import FragmentParser
+from MethylAnalyzer.UtilityFuncs import check_file
 
 def main(readlib, cmapfile, matesfile, out_dir):
     LOGFH = open(os.path.join(out_dir, 'parse_mates.LOG'), 'a')
