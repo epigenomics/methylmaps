@@ -16,24 +16,36 @@ from MethylAnalyzer.UtilityFuncs import check_file
 from MethylAnalyzer.MethError import MethError
 
 # Pipeline scripts
-PIPELINE = {1: 'parse_mates.py', 2: 'filter.py', 3: 'score.py'}
+PIPELINE = {1: {'mates': 'parse_mates.py', 'sam': 'parse_sam.py', 'bam': 'parse_sam.py'}, 
+            2: 'filter.py',
+            3: 'score.py'}
 
-def main(parafile, refile, mcrbcfile, out_dir, RUN):
+def main(RUN, read_format, parafile, refile, mcrbcfile, out_dir):
     ## Get parameters required for the pipeline
     para_dict = get_paras(parafile)
     chrlen_dict = get_lens(para_dict['CHR_LENGTH'])
-    ## Step 1. Parse *.mates files
+    ## Step 1. Parse paired reads
     # 1.1 Make fragment directory
     fragdir = os.path.join(out_dir, 'fragments')
     os.mkdir(fragdir)
     # 1.2 Make scripts
-    step1_re = ' '.join([PIPELINE[1], '--out_dir', fragdir, 're', para_dict['CMAP'], refile])
-    step1_mcrbc = ' '.join([PIPELINE[1], '--out_dir', fragdir, 'mcrbc', para_dict['CMAP'], mcrbcfile])
+    step1_scripts = []
+    if read_format == 'mates':  # parse_mates.py
+        for lib_name in ('re', 'mcrbc'):
+            script = ' '.join([PIPELINE[1][read_format], '--out_dir', fragdir, lib_name, para_dict['CMAP'], refile])
+            step1_scripts.append(script)
+    else:  # parse_sam.py
+        for chr in chrlen_dict.keys():
+            for lib_name in ('re', 'mcrbc'):
+                script = ' '.join([PIPELINE[1][read_format], '--min_ins', para_dict['MIN_INS'], \
+                                   '--max_ins', para_dict['MAX_INS'], '--out_dir', fragdir, read_format, \
+                                   lib_name, chr, refile])
+                step1_scripts.append(script)            
     # 1.3 Run scripts or save them to the script file
     if RUN:
-        print '**** Start step 1 - parse *.mates files ****', datetime.datetime.now()
-        os.system(step1_re)
-        os.system(step1_mcrbc)
+        print '**** Start step 1 - parse paired-read files ****', datetime.datetime.now()
+        for script in step1_scripts:
+            os.system(script)
         print '**** End step 1 ****\n', datetime.datetime.now()
     else:
         script_file = os.path.join(fragdir, 'scripts_step1')
@@ -120,23 +132,24 @@ def get_paras(parafile):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='The master script to generate all sub-scripts for the data analysis pipeline')
-    parser.add_argument('para', help='parameters required in the pipeline')
-    parser.add_argument('re_mates', help='mates file for RE fragments')
-    parser.add_argument('mcrbc_mates', help='mates file for McrBC fragments')
-    parser.add_argument('out_dir', help='directory for all output files of the pipeline')
     parser.add_argument('--run', type=bool, nargs='?', const=True, default=False, \
                         help='run the analysis pipeline or just save scripts, default=False')
+    parser.add_argument('--format', choices=['mates', 'sam', 'bam'], default='mates', help='paired file format, default=mates')
+    parser.add_argument('para', help='parameters required in the pipeline')
+    parser.add_argument('re_reads', help='paired read file for RE fragments')
+    parser.add_argument('mcrbc_reads', help='paired read file for McrBC fragments')
+    parser.add_argument('out_dir', help='directory for all output files of the pipeline')
     # Parse arguments
     args = parser.parse_args()
     try:
         parafile = check_file(args.para)
-        refile = check_file(args.re_mates)
-        mcrbcfile = check_file(args.mcrbc_mates)
+        refile = check_file(args.re_reads)
+        mcrbcfile = check_file(args.mcrbc_reads)
     except MethError, e:
         parser.print_usage()
         print >> sys.stderr, e.value
         sys.exit(2)
     if os.path.isdir(args.out_dir):
         out_dir = os.path.abspath(args.out_dir)
-    main(parafile, refile, mcrbcfile, out_dir, args.run)
+    main(args.run, args.format, parafile, refile, mcrbcfile, out_dir)
     

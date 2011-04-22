@@ -17,7 +17,7 @@ from MethylAnalyzer.MethError import MethError
 from MethylAnalyzer.MethBuilder import SiteParser, FragmentParser, REFilter, MCRBCFilter
 from MethylAnalyzer.UtilityFuncs import check_chr, check_file, count_file_lines
 
-DIR = os.path.dirname(__import__('MethBuilder').__file__)
+DIR = os.path.dirname(__import__('MethylAnalyzer').__file__)
 
 def main(parafile, chr, anno_dir, re_fragfile, mcrbc_fragfile, out_dir):
     # Get annotation files: e.g., chr1_cpgs, chr1_re, chr1_mcrbc
