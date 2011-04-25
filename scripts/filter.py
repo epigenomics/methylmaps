@@ -36,7 +36,7 @@ def main(parafile, chr, anno_dir, re_fragfile, mcrbc_fragfile, out_dir):
     # 2. Build CpGs
     LOGFH.write('... Build CpG sites ...  %s\n' % str(datetime.datetime.now()))
     siteparser = SiteParser(chr)
-    siteparser.parse_sites(cpg_file, 'CpG')
+    siteparser.parse_sites(cpg_file, 'CpGFull')
     cpg_sites = siteparser.get_sites()
     # 3. Build RE sites first
     LOGFH.write('... Build RE sites ...  %s\n' % str(datetime.datetime.now()))

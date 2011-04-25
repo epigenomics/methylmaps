@@ -28,7 +28,7 @@ def main(chrs, scale, step, meth_dir, cpg_dir, out_dir, sname):
             print >> sys.stderr, e.value
             continue
         siteparser = SiteParser(chr)
-        siteparser.parse_sites(cpgfile, 'CpG')
+        siteparser.parse_sites(cpgfile, 'CpGSimple')
         cpg_sites = siteparser.get_sites()
         for cpg in cpg_sites:  # define empty meth score
             cpg.meth_score = '-10000'
