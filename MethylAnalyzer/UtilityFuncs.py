@@ -69,6 +69,11 @@ def check_chr(chrN):
         return chrN
     raise MethError('Wrong chromosome name %s' % chrN)
 
+def check_dir(path):
+    if os.path.isdir(path):
+        return os.path.abspath(path)
+    raise MethError('Such directory [%s] does not exist' % path)
+
 def check_file(filename, PATH=None):
     "Check if the file exits"
     if PATH is not None:

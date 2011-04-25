@@ -19,16 +19,17 @@ One easy way to install the above packages is to use 'pip'. For example,
 2. Installation
 ===============
 
-Download Methyl-Analyzer from:
+2.1 Download Methyl-Analyzer from: 
      http://github.com/epigenomics/methylmaps
 or clone the repository via git:
      git clone git://github.com/epigenomics/methylmaps.git
 
-At the methylmaps directory, run the following command:
+2.2 At the methylmaps directory, run the following command:
      $ python setup.py build
      $ sudo python setup.py install
 
-All data analysis scripts are stored under the "scripts" directory
+All data analysis scripts are stored under the python bin directory.
+
 
 
 3. Pre-analysis data preparation
@@ -89,7 +90,7 @@ Compile required annotation files for the data analysis pipeline
      4) Define output directory
 
    * Example:
-        $ run_pipeline.py pipeline_paras_hg18 re_reads.mates \
+        $ run_pipeline.py --format mates pipeline_paras_hg18 re_reads.mates \
           mcrbc_reads.mates /path/to/out_dir --run
 
 

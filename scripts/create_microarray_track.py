@@ -12,7 +12,7 @@ import os
 import datetime
 
 from MethylAnalyzer.MethError import MethError
-from MethylAnalyzer.MethBuilder import SiteParser, HUMAN_MAIN_CHRS, MOUSE_MAIN_CHRS
+from MethylAnalyzer.MethBuilder import SiteParser, GENOMES
 from MethylAnalyzer.UtilityFuncs import check_file
 
 def main(chrs, scale, step, meth_dir, cpg_dir, out_dir, sname):
@@ -81,10 +81,8 @@ if __name__ == '__main__':
     parser.add_argument('cpg_dir', help='directory for CpG annotation files')
     # Parse arguments
     args = parser.parse_args()
-    if args.genome == 'human':
-        chrs = HUMAN_MAIN_CHRS
-    elif args.genome == 'mouse':
-        chrs = MOUSE_MAIN_CHRS
+    if args.genome in GENOMES.keys():
+        chrs = GENOMES[args.genome]
     else:
         parser.print_usage()
         print >> sys.stderr, 'Invalid genome, human/mouse genome available'

@@ -22,32 +22,29 @@ IDX2RE = {4:'CCGC', 5:'GCGG', 6:'GCGC', 7:'CCGG', 8:'ACGT', 9:'CGCG'}
 # For CpG atlas table: column index vs. McrBC sequence
 IDX2MCRBC = {10:'ACG', 11:'GCG', 12:'CGC', 13:'CGT'}
 
-# Available Fasta sequences for hg18
-HUMAN_CHRS = ['chr1', 'chr2', 'chr3', 'chr4', 'chr5', 'chr6', 'chr7', 'chr8', 'chr9',
-              'chr10', 'chr11', 'chr12', 'chr13', 'chr14', 'chr15', 'chr16', 'chr17',
-              'chr18', 'chr19', 'chr20', 'chr21', 'chr22', 'chrX', 'chrY', 'chrM', 
-              'chr1_random', 'chr2_random', 'chr3_random', 'chr4_random', 'chr5_random',
-              'chr6_random', 'chr7_random', 'chr8_random', 'chr9_random', 'chr10_random',
-              'chr11_random', 'chr13_random', 'chr15_random', 'chr16_random', 'chr17_random',
-              'chr18_random', 'chr19_random', 'chr21_random', 'chr22_random', 'chrX_random',
-              'chr5_h2_hap1', 'chr6_cox_hap1', 'chr6_qbl_hap2', 'chr22_h2_hap1']
-
-HUMAN_MAIN_CHRS = ['chr1', 'chr2', 'chr3', 'chr4', 'chr5', 'chr6', 'chr7', 'chr8', 'chr9',
-                   'chr10', 'chr11', 'chr12', 'chr13', 'chr14', 'chr15', 'chr16', 'chr17',
-                   'chr18', 'chr19', 'chr20', 'chr21', 'chr22', 'chrX', 'chrY']
-              
-# Available Fasta sequences for mm9
-MOUSE_CHRS = ['chr1', 'chr2', 'chr3', 'chr4', 'chr5', 'chr6', 'chr7', 'chr8', 'chr9',
-              'chr10', 'chr11', 'chr12', 'chr13', 'chr14', 'chr15', 'chr16', 'chr17',
-              'chr18', 'chr19', 'chrX', 'chrY', 'chrM',
-              'chr1_random', 'chr3_random', 'chr4_random', 'chr5_random', 'chr7_random',
-              'chr8_random', 'chr9_random', 'chr13_random', 'chr16_random', 'chr17_random',
-              'chrX_random', 'chrY_random', 'chrUn_random']
-
-MOUSE_MAIN_CHRS = ['chr1', 'chr2', 'chr3', 'chr4', 'chr5', 'chr6', 'chr7', 'chr8', 'chr9',
-                   'chr10', 'chr11', 'chr12', 'chr13', 'chr14', 'chr15', 'chr16', 'chr17',
-                   'chr18', 'chr19', 'chrX', 'chrY']
-
+# Available chromosome names (with Fasta sequences) for various genome builds
+GENOMES = {
+    'hg18': ['chr1', 'chr2', 'chr3', 'chr4', 'chr5', 'chr6', 'chr7', 'chr8', 'chr9',
+             'chr10', 'chr11', 'chr12', 'chr13', 'chr14', 'chr15', 'chr16', 'chr17',
+             'chr18', 'chr19', 'chr20', 'chr21', 'chr22', 'chrX', 'chrY', 'chrM', 
+             'chr1_random', 'chr2_random', 'chr3_random', 'chr4_random', 'chr5_random',
+             'chr6_random', 'chr7_random', 'chr8_random', 'chr9_random', 'chr10_random',
+             'chr11_random', 'chr13_random', 'chr15_random', 'chr16_random', 'chr17_random',
+             'chr18_random', 'chr19_random', 'chr21_random', 'chr22_random', 'chrX_random',
+             'chr5_h2_hap1', 'chr6_cox_hap1', 'chr6_qbl_hap2', 'chr22_h2_hap1'],
+    'hg18_main': ['chr1', 'chr2', 'chr3', 'chr4', 'chr5', 'chr6', 'chr7', 'chr8', 'chr9',
+                  'chr10', 'chr11', 'chr12', 'chr13', 'chr14', 'chr15', 'chr16', 'chr17',
+                  'chr18', 'chr19', 'chr20', 'chr21', 'chr22', 'chrX', 'chrY'],              
+    'mm9': ['chr1', 'chr2', 'chr3', 'chr4', 'chr5', 'chr6', 'chr7', 'chr8', 'chr9',
+            'chr10', 'chr11', 'chr12', 'chr13', 'chr14', 'chr15', 'chr16', 'chr17',
+            'chr18', 'chr19', 'chrX', 'chrY', 'chrM',
+            'chr1_random', 'chr3_random', 'chr4_random', 'chr5_random', 'chr7_random',
+            'chr8_random', 'chr9_random', 'chr13_random', 'chr16_random', 'chr17_random',
+            'chrX_random', 'chrY_random', 'chrUn_random'],
+    'mm9_main': ['chr1', 'chr2', 'chr3', 'chr4', 'chr5', 'chr6', 'chr7', 'chr8', 'chr9',
+                 'chr10', 'chr11', 'chr12', 'chr13', 'chr14', 'chr15', 'chr16', 'chr17',
+                 'chr18', 'chr19', 'chrX', 'chrY']
+    }
 
 # Classes
 class Position:
@@ -463,7 +460,7 @@ class SiteParser:
         self.sites = PosDict('Site')
 
     # Private methods
-    def _parse_cpgs(self, sitefh):
+    def _parse_cpgs_full(self, sitefh):
         for line in sitefh:
             line_list = line.rstrip().split('\t')
             # Get values
@@ -485,7 +482,17 @@ class SiteParser:
             except MethError, e:
                 print >> sys.stderr, 'MethError: ', e.value
                 sys.exit(2)
-                
+
+    def _parse_cpgs_simple(self, sitefh):
+        for line in sitefh:
+            coord = int(line.rstrip().split('\t')[1])
+            cpg = Position(coord)
+            try:
+                self.sites.add(cpg)
+            except MethError, e:
+                print >> sys.stderr, 'MethError: ', e.value
+                sys.exit(2)
+                    
     def _parse_enzymes(self, sitefh):
         for line in sitefh:
             line_list = line.rstrip().split('\t')
@@ -560,7 +567,7 @@ class SiteParser:
         Build sites from the sitefile (stored in the annotation directory)
         Input
         o sitefile - string, filename
-        o label - string, CpG/RE/McrBC
+        o label - string, CpGFull/CpGSimple/RE/McrBC
         
         CpG annotation file format:
            chr, coordinate, is_re, is_mcrbc, is_AciI, is_AciI_comp, is_HhaI
@@ -569,12 +576,16 @@ class SiteParser:
            chr  coordinate
         """
         sitefh = open(sitefile)
-        # Parse CpGs
-        if label == 'CpG':
-            self._parse_cpgs(sitefh)
+        # Parse CpGs in full annotation
+        if label == 'CpGFull':
+            self._parse_cpgs_full(sitefh)
+        elif label == 'CpGSimple':
+            self._parse_cpgs_simple(sitefh)
         # Parse RE/McrBC sites
         elif label == 'RE' or label == 'McrBC':
             self._parse_enzymes(sitefh)
+        else:
+            raise MethError("Wrong label")
         sitefh.close()
 
     def cpgdensity_bycpg(self, winlen):
