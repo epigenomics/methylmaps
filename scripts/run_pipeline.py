@@ -30,16 +30,17 @@ def main(RUN, read_format, parafile, refile, mcrbcfile, out_dir):
     os.mkdir(fragdir)
     # 1.2 Make scripts
     step1_scripts = []
+    file_dict = {'re': refile, 'mcrbc': mcrbcfile}
     if read_format == 'mates':  # parse_mates.py
         for lib_name in ('re', 'mcrbc'):
-            script = ' '.join([PIPELINE[1][read_format], '--out_dir', fragdir, lib_name, para_dict['CMAP'], refile])
+            script = ' '.join([PIPELINE[1][read_format], '--out_dir', fragdir, lib_name, para_dict['CMAP'], file_dict[lib_name]])
             step1_scripts.append(script)
     else:  # parse_sam.py
         for chr in chrlen_dict.keys():
             for lib_name in ('re', 'mcrbc'):
                 script = ' '.join([PIPELINE[1][read_format], '--min_ins', para_dict['MIN_INS'], \
                                    '--max_ins', para_dict['MAX_INS'], '--out_dir', fragdir, read_format, \
-                                   lib_name, chr, refile])
+                                   lib_name, chr, file_dict[lib_name]])
                 step1_scripts.append(script)            
     # 1.3 Run scripts or save them to the script file
     if RUN:
