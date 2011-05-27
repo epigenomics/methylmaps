@@ -1182,9 +1182,9 @@ class MethStateParser:
         methfh = open(methfile)
         for line in methfh:
             coord, re_idx, mcrbc_idx, re_count, mcrbc_count, re_clean_count, mcrbc_clean_count, reInterior, reEnd, mcrbcInterior = self._parse_methline(line)
-            # Skip the line if the methylation value is equal to 0
-            if reInterior + mcrbcInterior == 0:
-                continue
+            #### Skip the line if the methylation value is equal to 0
+            ###if reInterior + mcrbcInterior == 0:
+            ###    continue
             cpg = self.cpg_sites[coord]
             # Update RE/McrBC counts
             cpg.re_count += re_count
