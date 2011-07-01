@@ -108,3 +108,9 @@ profiles.
 
 * Wiggle tracks for DNA methylation profiles: use 'create_wiggle_track.py'
 
+
+6. Citation
+================
+
+Xin Y, Ge Y, Haghighi F. Methyl-Analyzer - Whole Genome DNA Methylation
+Profiling. Bioinformatics. 2011 Jun 17. [Epub ahead of print]
